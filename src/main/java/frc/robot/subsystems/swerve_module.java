@@ -84,7 +84,7 @@ public class swerve_module extends SubsystemBase {
   }
   // Get SwerveModule Absolute Position
   public double getTurningPosition(){
-    return absoluteEncoder.getAbsolutePosition().getValue();
+    return absoluteEncoder.getAbsolutePosition().getValue() * 360;
   }
   // Get Turn Motor Encoder Position
   public double getTurnintEncoderPosition(){
