@@ -5,15 +5,14 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -24,6 +23,8 @@ public class SwerveDrivebase extends SubsystemBase {
   private final swerve_module leftFrontModule, rightFrontModule, leftRearModule, rightRearModule;
   private final Pigeon2 gyro = new Pigeon2(Constants.kGyroID);
   private SwerveDriveOdometry odometer;
+  // Visuallze robot position on the Field
+  private Field2d m_field = new Field2d();
   
   public SwerveDrivebase(){
     // Setting Up Gyro
@@ -73,7 +74,10 @@ public class SwerveDrivebase extends SubsystemBase {
       SwerveConstants.swerveKinematics,  
       gyro.getRotation2d(), // The real heading of robot
       getModulePosition()); // Each heading of Modules 
+    //
+    SmartDashboard.putData("Field", m_field);
   }
+
   // Reset Gyro Heading
   public void zeroHeading(){
     gyro.reset();
@@ -134,5 +138,7 @@ public class SwerveDrivebase extends SubsystemBase {
     odometer.update(
       getRotation2d(),
       getModulePosition());
+    // 
+    m_field.setRobotPose(odometer.getPoseMeters());
   }
 }
