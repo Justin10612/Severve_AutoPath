@@ -23,7 +23,7 @@ import frc.robot.Constants.SwerveConstants;
 public class SwerveDrivebase extends SubsystemBase {
   private final swerve_module leftFrontModule, rightFrontModule, leftRearModule, rightRearModule;
   private final Pigeon2 gyro = new Pigeon2(Constants.kGyroID);
-  // private SwerveDriveOdometry m_odometry;
+  private SwerveDriveOdometry odometer;
   
   public SwerveDrivebase(){
     // Setting Up Gyro
@@ -69,10 +69,10 @@ public class SwerveDrivebase extends SubsystemBase {
       SwerveConstants.rightRearCANCoderID, 
       SwerveConstants.rightRearOffset);
     // Setting Odometer
-    // m_odometry = new SwerveDriveOdometry(
-    //   swerveKinematics, 
-    //   gyro.getRotation2d(), 
-    //   getModulePosition());
+    odometer = new SwerveDriveOdometry(
+      SwerveConstants.swerveKinematics,  
+      gyro.getRotation2d(), // The real heading of robot
+      getModulePosition()); // Each heading of Modules 
   }
   // Reset Gyro Heading
   public void zeroHeading(){
@@ -93,8 +93,6 @@ public class SwerveDrivebase extends SubsystemBase {
     rightFrontModule.setDesiredState(desiredStates[1]);
     leftRearModule.setDesiredState(desiredStates[2]);
     rightRearModule.setDesiredState(desiredStates[3]);
-    SmartDashboard.putNumber("m1_drive", desiredStates[0].speedMetersPerSecond);
-    SmartDashboard.putNumber("m1_turn", desiredStates[0].angle.getDegrees());
   }
   // Stop Each Module
   public void stopModules(){
@@ -121,16 +119,20 @@ public class SwerveDrivebase extends SubsystemBase {
       rightRearModule.getState()
     };
   }
-
-  // public Pose2d getPose(){
-  //     return m_odometry.getPoseMeters();
-  // }
-
-  // public void setPose(Pose2d pose){
-  //     m_odometry.resetPosition(gyro.getRotation2d(), getModulePosition(), pose);
-  // }
+  // Get Pose from Odometer
+  public Pose2d getPose(){
+      return odometer.getPoseMeters();
+  }
+  // Align the Odometer pose with real robot pose
+  public void setPose(Pose2d pose){
+      odometer.resetPosition(gyro.getRotation2d(), getModulePosition(), pose);
+  }
 
   @Override
   public void periodic() {
+    // Update odometer position
+    odometer.update(
+      getRotation2d(),
+      getModulePosition());
   }
 }
