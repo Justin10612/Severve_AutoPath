@@ -5,7 +5,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
 public class Constants {
-    
+    // Hardware ID
     public static final int kGyroID = 10;
     public static final class JoystickConstants{
         public static final double kJoystickDeadband = 0.05;
@@ -30,15 +30,23 @@ public class Constants {
         public static final double kTurnMotorkP = 0.005;
         public static final double kMaxDriveMotorSpeed = 4.0;
     }
+    // Auto Path Constants
+    public static final class AutoConstants{
+        public static final double kMaxAutoSpeedMetersPerSec = 4.5;
+        public static final double kAutoDriveMaxAngularSpeedMetersPerSec = 0.25;
+    }
     // Constants for Drivebase
     public static final class SwerveConstants{
+        // Max Drive Speed
         public static final double kTeleDriveMaxSpeedMetersPerSec = 0.25;
         public static final double kTeleDriveMaxAngularSpeedMetersPerSec = 0.25;
+        // Slew Rate
         public static final double kLinearSlewRate = 4;
         public static final double kAngularSlewRate = 4;
         // Drivebase
         public static final double kRobotLength = 0.66;
         public static final double kRobotWidth = 0.66;
+        public static final double kDrivebaseRadius = 0.47;
         // CAN ID
         public static final int leftFrontDriveID = 7;
         public static final int leftFrontTurningID = 8;
